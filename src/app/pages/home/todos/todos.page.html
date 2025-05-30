@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab horizontal="center" vertical="bottom" slot="fixed">
+    <ion-fab-button id="open-custom-dialog-todo" expand="block">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-select
+    [label]="'Filtrar por categorias'"
+    label-placement="floating"
+    fill="solid"
+    [(ngModel)]="idCategoria"
+    (ionChange)="cargarTareas()"
+  >
+    <ion-select-option [value]="category.id" *ngFor="let category of categorias"
+      >{{category.nombre}}</ion-select-option
+    >
+  </ion-select>
+
+  <ng-template #sinResultados>
+    <ion-card class="ion-text-center">
+      <ion-card-content>
+        <ion-icon name="search-outline" size="large"></ion-icon>
+        <p>No se encontraron resultados</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ng-container *ngIf="tareas.length > 0; else sinResultados">
+    <ion-card *ngFor="let todo of tareas">
+      <ion-card-header>
+        <ion-card-title>{{ todo.titulo }}</ion-card-title>
+        <ion-card-subtitle>{{ todo.nombreCategoria }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content> {{ todo.descripcion }} </ion-card-content>
+
+      <ion-button
+        color="success"
+        fill="clear"
+        (click)="completar(todo.id!)"
+        *ngIf="!todo.completado"
+        >Completar</ion-button
+      >
+      <ion-button color="danger" fill="clear" (click)="eliminar(todo.id!)"
+        >Eliminar</ion-button
+      >
+    </ion-card>
+  </ng-container>
+
+  <ion-modal id="example-modal" #modal trigger="open-custom-dialog-todo">
+    <ng-template>
+      <div class="wrapper">
+        <app-form
+          [fields]="dataFields"
+          [title]="'Crear tarea'"
+          (reloadTable)="reloadData($event)"
+        ></app-form>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

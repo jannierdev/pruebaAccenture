@@ -1,0 +1,41 @@
+<h1>{{title}}</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <ion-list lines="none">
+    <ion-item *ngFor="let field of fields">
+      <!-- Input -->
+      <ion-input
+        *ngIf="field.typeField === 'input'"
+        [label]="field.name"
+        label-placement="floating"
+        fill="solid"
+        [placeholder]="field.name"
+        [formControlName]="field.field"
+      ></ion-input>
+
+      <!-- Textarea -->
+      <ion-textarea
+        *ngIf="field.typeField === 'textarea'"
+        [label]="field.name"
+        labelPlacement="floating"
+        fill="solid"
+        [placeholder]="field.name"
+        [formControlName]="field.field"
+      ></ion-textarea>
+
+      <!-- Select -->
+      <ion-select
+        *ngIf="field.typeField === 'select'"
+        [label]="field.name"
+        label-placement="floating"
+        fill="solid"
+        [formControlName]="field.field"
+      >
+        <ion-select-option [value]="option.id" *ngFor="let option of field.options">{{option.nombre}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-button type="submit" slot="end">{{edit ? 'Actualizar' : 'Crear'}}</ion-button>
+    </ion-item>
+  </ion-list>
+</form>

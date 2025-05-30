@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Categorias</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-fab horizontal="center" vertical="bottom" slot="fixed">
+    <ion-fab-button id="open-custom-dialog" expand="block">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ng-template #sinResultados>
+    <ion-card class="ion-text-center">
+      <ion-card-content>
+        <ion-icon name="search-outline" size="large"></ion-icon>
+        <p>No se encontraron resultados</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ion-list *ngIf="categorias.length > 0; else sinResultados">
+    <ion-item *ngFor="let category of categorias">
+      <ion-label>{{category.nombre}}</ion-label>
+      <ion-icon
+        name="create-outline"
+        slot="end"
+        color="primary"
+        (click)="editCategory(category)"
+      ></ion-icon>
+      <ion-icon
+        name="trash-outline"
+        slot="end"
+        color="danger"
+        (click)="deleteCategory( category.id!)"
+      ></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-modal
+    id="example-modal"
+    #modalCategory
+    trigger="open-custom-dialog"
+    (ionModalDidDismiss)="onModalClosed($event)"
+  >
+    <ng-template>
+      <div class="wrapper">
+        <app-form
+          [fields]="dataFields"
+          [title]="'Crear categoria'"
+          (reloadTable)="reloadData($event)"
+          [data]="data"
+          [edit]="edit"
+        ></app-form>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>
